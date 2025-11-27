@@ -1,188 +1,194 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Bus, Users, BarChart3, MapPin, Clock, TrendingUp } from "lucide-react";
-import { Link } from "react-router-dom";
+import React, { useState } from 'react';
+import { Moon, Sun, Bus, TrendingUp, MapPin, BarChart3, Users, Navigation, Clock, Shield } from 'lucide-react';
 
 const Index = () => {
+  const [isDark, setIsDark] = useState(true);
+
+  const features = [
+    {
+      icon: MapPin,
+      title: "Real-Time Tracking",
+      description: "Live GPS tracking of all campus buses with accurate ETA predictions",
+      color: "from-blue-500 to-cyan-500"
+    },
+    {
+      icon: TrendingUp,
+      title: "ML Demand Prediction",
+      description: "Prophet model predicts demand patterns for next hour and next day",
+      color: "from-green-500 to-emerald-500"
+    },
+    {
+      icon: Navigation,
+      title: "Smart Route Optimization",
+      description: "K-Means clustering identifies high-demand zones for efficient routing",
+      color: "from-orange-500 to-amber-500"
+    }
+  ];
+
+  const stats = [
+    { icon: Bus, value: "50+", label: "Active Buses" },
+    { icon: Users, value: "10K+", label: "Students" },
+    { icon: Clock, value: "95%", label: "On-Time Rate" },
+    { icon: Shield, value: "24/7", label: "Monitoring" }
+  ];
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-secondary">
-      {/* Hero Section */}
-      <header className="container mx-auto px-6 pt-16 pb-12">
-        <div className="text-center max-w-4xl mx-auto">
-          <div className="flex items-center justify-center gap-3 mb-6">
-            <Bus className="h-12 w-12 text-primary" />
-            <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-primary via-primary-glow to-accent bg-clip-text text-transparent">
-              CampusTransit
-            </h1>
-          </div>
-          <p className="text-xl text-muted-foreground mb-8">
-            Smart Transport Management System powered by ML-driven demand prediction and real-time GPS tracking
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-4">
-            <Link to="/student">
-              <Button size="lg" className="shadow-[var(--shadow-medium)]">
-                <Users className="mr-2 h-5 w-5" />
-                Student Portal
-              </Button>
-            </Link>
-            <Link to="/driver">
-              <Button size="lg" variant="secondary" className="shadow-[var(--shadow-medium)]">
-                <MapPin className="mr-2 h-5 w-5" />
-                Driver Portal
-              </Button>
-            </Link>
-            <Link to="/admin">
-              <Button size="lg" variant="outline" className="shadow-[var(--shadow-soft)]">
-                <BarChart3 className="mr-2 h-5 w-5" />
-                Admin Dashboard
-              </Button>
-            </Link>
+    <div className={`min-h-screen transition-colors duration-300 ${isDark ? 'bg-gray-900' : 'bg-gray-50'}`}>
+      {/* Navigation */}
+      <nav className={`fixed top-0 w-full z-50 backdrop-blur-lg border-b ${isDark ? 'bg-gray-900/80 border-gray-800' : 'bg-white/80 border-gray-200'}`}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            <div className="flex items-center space-x-3">
+              <div className="bg-gradient-to-r from-blue-500 to-cyan-500 p-2 rounded-lg">
+                <Bus className="w-6 h-6 text-white" />
+              </div>
+              <span className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                Campus<span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-500">Transit</span>
+              </span>
+            </div>
+            
+            <button
+              onClick={() => setIsDark(!isDark)}
+              className={`p-2 rounded-lg transition-colors ${isDark ? 'bg-gray-800 hover:bg-gray-700 text-yellow-400' : 'bg-gray-200 hover:bg-gray-300 text-gray-700'}`}
+              aria-label="Toggle theme"
+            >
+              {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            </button>
           </div>
         </div>
-      </header>
+      </nav>
 
-      {/* Features Section */}
-      <section className="container mx-auto px-6 py-12">
-        <h2 className="text-3xl font-bold text-center mb-12">Key Features</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <Card className="shadow-[var(--shadow-medium)] border-t-4 border-t-primary">
-            <CardHeader>
-              <MapPin className="h-8 w-8 text-primary mb-2" />
-              <CardTitle>Real-Time Tracking</CardTitle>
-              <CardDescription>
-                Live GPS tracking of all campus buses with accurate ETA predictions
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">
-                Students and admins can monitor bus locations in real-time on interactive maps
-              </p>
-            </CardContent>
-          </Card>
+      {/* Hero Section */}
+      <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center space-y-8">
+            <div className="inline-block">
+              <div className="flex items-center space-x-2 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border border-blue-500/20 rounded-full px-4 py-2 mb-6">
+                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                <span className={`text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                  Next-Gen Campus Transportation
+                </span>
+              </div>
+            </div>
 
-          <Card className="shadow-[var(--shadow-medium)] border-t-4 border-t-accent">
-            <CardHeader>
-              <TrendingUp className="h-8 w-8 text-accent mb-2" />
-              <CardTitle>ML Demand Prediction</CardTitle>
-              <CardDescription>
-                Prophet model predicts demand patterns for next hour and next day
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">
-                Historical and live data analysis helps optimize bus allocation and reduce wait times
-              </p>
-            </CardContent>
-          </Card>
+            <h1 className={`text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight ${isDark ? 'text-white' : 'text-gray-900'}`}>
+              Smart Transport
+              <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-green-400">
+                Management System
+              </span>
+            </h1>
 
-          <Card className="shadow-[var(--shadow-medium)] border-t-4 border-t-warning">
-            <CardHeader>
-              <BarChart3 className="h-8 w-8 text-warning mb-2" />
-              <CardTitle>Smart Route Optimization</CardTitle>
-              <CardDescription>
-                K-Means clustering identifies high-demand zones for efficient routing
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">
-                Dynamic route planning reduces fuel consumption and improves service efficiency
-              </p>
-            </CardContent>
-          </Card>
+            <p className={`max-w-2xl mx-auto text-xl ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+              ML-driven demand prediction meets real-time GPS tracking for seamless campus mobility
+            </p>
 
-          <Card className="shadow-[var(--shadow-medium)] border-t-4 border-t-primary">
-            <CardHeader>
-              <Users className="h-8 w-8 text-primary mb-2" />
-              <CardTitle>Student Portal</CardTitle>
-              <CardDescription>
-                Easy-to-use interface for booking and tracking campus transport
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">
-                Submit travel requests with source, destination, and preferred time
-              </p>
-            </CardContent>
-          </Card>
+            {/* Portal Buttons */}
+            <div className="flex flex-wrap justify-center gap-4 pt-8">
 
-          <Card className="shadow-[var(--shadow-medium)] border-t-4 border-t-accent">
-            <CardHeader>
-              <Bus className="h-8 w-8 text-accent mb-2" />
-              <CardTitle>Driver Dashboard</CardTitle>
-              <CardDescription>
-                GPS location sharing and route navigation for drivers
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">
-                Real-time directions and passenger information for optimal service delivery
-              </p>
-            </CardContent>
-          </Card>
+              {/* ⭐ FIXED STUDENT PORTAL BUTTON */}
+              <a
+                href="/student"
+                className={`px-8 py-4 rounded-xl font-semibold transition-all duration-300 hover:scale-105 
+                ${isDark ? 'bg-gray-800 text-white hover:bg-gray-700' : 'bg-white text-gray-900 hover:bg-gray-100 shadow-lg'}`}
+              >
+                <Users className="w-5 h-5 inline-block mr-2" />
+                Student Portal
+              </a>
 
-          <Card className="shadow-[var(--shadow-medium)] border-t-4 border-t-warning">
-            <CardHeader>
-              <Clock className="h-8 w-8 text-warning mb-2" />
-              <CardTitle>Admin Analytics</CardTitle>
-              <CardDescription>
-                Comprehensive dashboard with demand heatmaps and fleet monitoring
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">
-                Monitor bus movements, analyze demand patterns, and optimize operations
-              </p>
-            </CardContent>
-          </Card>
+              <a
+                href="/driver"
+                className={`px-8 py-4 rounded-xl font-semibold transition-all duration-300 hover:scale-105 ${isDark ? 'bg-gray-800 text-white hover:bg-gray-700' : 'bg-white text-gray-900 hover:bg-gray-100 shadow-lg'}`}
+              >
+                <Navigation className="w-5 h-5 inline-block mr-2" />
+                Driver Portal
+              </a>
+
+              <a
+                href="/admin"
+                className={`px-8 py-4 rounded-xl font-semibold transition-all duration-300 hover:scale-105 ${isDark ? 'bg-gray-800 text-white hover:bg-gray-700' : 'bg-white text-gray-900 hover:bg-gray-100 shadow-lg'}`}
+              >
+                <BarChart3 className="w-5 h-5 inline-block mr-2" />
+                Admin Dashboard
+              </a>
+
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Tech Stack Section */}
-      <section className="container mx-auto px-6 py-12">
-        <Card className="shadow-[var(--shadow-elevated)] bg-card">
-          <CardHeader className="text-center">
-            <CardTitle className="text-2xl">Built with Modern Technology</CardTitle>
-            <CardDescription>Powered by React, TypeScript, and advanced ML models</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-              <div>
-                <div className="h-16 w-16 mx-auto mb-2 rounded-full bg-primary/10 flex items-center justify-center">
-                  <span className="text-2xl font-bold text-primary">⚛️</span>
+      {/* Stats Section */}
+      <section className="py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {stats.map((stat, index) => (
+              <div
+                key={index}
+                className={`p-6 rounded-2xl backdrop-blur-sm border ${isDark ? 'bg-gray-800/50 border-gray-700' : 'bg-white border-gray-200 shadow-lg'}`}
+              >
+                <stat.icon className={`w-8 h-8 mb-3 ${isDark ? 'text-cyan-400' : 'text-blue-500'}`} />
+                <div className={`text-3xl font-bold mb-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  {stat.value}
                 </div>
-                <p className="font-medium">React.js</p>
-                <p className="text-xs text-muted-foreground">Frontend</p>
-              </div>
-              <div>
-                <div className="h-16 w-16 mx-auto mb-2 rounded-full bg-accent/10 flex items-center justify-center">
-                  <span className="text-2xl font-bold text-accent">🐍</span>
+                <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                  {stat.label}
                 </div>
-                <p className="font-medium">Python</p>
-                <p className="text-xs text-muted-foreground">Backend</p>
               </div>
-              <div>
-                <div className="h-16 w-16 mx-auto mb-2 rounded-full bg-warning/10 flex items-center justify-center">
-                  <span className="text-2xl font-bold text-warning">🧠</span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className={`text-4xl font-bold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+              Key Features
+            </h2>
+            <p className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+              Powered by advanced technology and intelligent algorithms
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {features.map((feature, index) => (
+              <div
+                key={index}
+                className={`group p-8 rounded-2xl border backdrop-blur-sm transition-all duration-300 hover:scale-105 ${isDark ? 'bg-gray-800/50 border-gray-700 hover:border-gray-600' : 'bg-white border-gray-200 shadow-lg hover:shadow-xl'}`}
+              >
+                <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${feature.color} p-3 mb-6 group-hover:scale-110 transition-transform duration-300`}>
+                  <feature.icon className="w-full h-full text-white" />
                 </div>
-                <p className="font-medium">Prophet</p>
-                <p className="text-xs text-muted-foreground">ML Model</p>
+                <h3 className={`text-2xl font-bold mb-3 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  {feature.title}
+                </h3>
+                <p className={isDark ? 'text-gray-400' : 'text-gray-600'}>
+                  {feature.description}
+                </p>
               </div>
-              <div>
-                <div className="h-16 w-16 mx-auto mb-2 rounded-full bg-primary/10 flex items-center justify-center">
-                  <span className="text-2xl font-bold text-primary">🗺️</span>
-                </div>
-                <p className="font-medium">Maps API</p>
-                <p className="text-xs text-muted-foreground">Tracking</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+            ))}
+          </div>
+        </div>
       </section>
 
       {/* Footer */}
-      <footer className="container mx-auto px-6 py-8 text-center text-muted-foreground">
-        <p>© 2025 CampusTransit - IEEE Bengaluru Winter of Innovation</p>
-        <p className="text-sm mt-2">N.Suchitra • Shreya S Patil • Varshini KS • Sinchana CE</p>
+      <footer className={`border-t mt-20 ${isDark ? 'bg-gray-900 border-gray-800' : 'bg-white border-gray-200'}`}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="text-center">
+            <div className="flex items-center justify-center space-x-3 mb-4">
+              <div className="bg-gradient-to-r from-blue-500 to-cyan-500 p-2 rounded-lg">
+                <Bus className="w-5 h-5 text-white" />
+              </div>
+              <span className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                CampusTransit
+              </span>
+            </div>
+            <p className={isDark ? 'text-gray-400' : 'text-gray-600'}>
+               CampusTransit. Transforming campus transportation.
+            </p>
+          </div>
+        </div>
       </footer>
     </div>
   );
