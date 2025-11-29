@@ -15,6 +15,7 @@ import StudentPortal from "./pages/StudentPortal";
 import DriverPortal from "./pages/DriverPortal";
 import AdminPortal from "./pages/AdminPortal";
 import NotFound from "./pages/NotFound";
+import TestConnection from "./components/TestConnection"; // ADD THIS LINE
 
 const queryClient = new QueryClient();
 
@@ -64,7 +65,10 @@ const App = () => (
         <ThemeProvider>
           <Routes>
             <Route path="/" element={<Index />} />
-
+            
+            {/* ADD THIS TEST ROUTE */}
+            <Route path="/test-connection" element={<TestConnection />} />
+            
             {/* Student */}
             <Route path="/student/auth" element={<StudentAuth />} />
             <Route

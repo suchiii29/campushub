@@ -1,139 +1,69 @@
+/* Add these animations to your tailwind.config.js or index.css */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
-
-@layer base {
-  :root {
-    --background: 220 25% 98%;
-    --foreground: 220 15% 15%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 220 15% 15%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 220 15% 15%;
-
-    /* Transport brand colors - blue for trust/reliability */
-    --primary: 217 91% 60%;
-    --primary-foreground: 0 0% 100%;
-    --primary-glow: 217 91% 70%;
-
-    --secondary: 220 25% 95%;
-    --secondary-foreground: 220 15% 15%;
-
-    --muted: 220 15% 96%;
-    --muted-foreground: 220 10% 45%;
-
-    --accent: 142 76% 45%;
-    --accent-foreground: 0 0% 100%;
-
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%;
-
-    --warning: 38 92% 50%;
-    --warning-foreground: 0 0% 100%;
-
-    --border: 220 15% 88%;
-    --input: 220 15% 88%;
-    --ring: 217 91% 60%;
-
-    --radius: 0.75rem;
-
-    /* Custom transport theme colors */
-    --bus-active: 217 91% 60%;
-    --bus-idle: 220 10% 45%;
-    --route-path: 142 76% 45%;
-    --demand-high: 0 84% 60%;
-    --demand-medium: 38 92% 50%;
-    --demand-low: 142 76% 45%;
-
-    /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%), hsl(217 91% 70%));
-    --gradient-map: linear-gradient(180deg, hsl(220 25% 98% / 0.9), hsl(220 25% 98% / 0.7));
-
-    /* Shadows */
-    --shadow-soft: 0 2px 8px hsl(220 15% 15% / 0.08);
-    --shadow-medium: 0 4px 16px hsl(220 15% 15% / 0.12);
-    --shadow-elevated: 0 8px 24px hsl(220 15% 15% / 0.15);
-
-    --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 220 15% 15%;
-    --sidebar-primary: 217 91% 60%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 220 25% 95%;
-    --sidebar-accent-foreground: 220 15% 15%;
-    --sidebar-border: 220 15% 88%;
-    --sidebar-ring: 217 91% 60%;
+@layer utilities {
+  .animate-fadeIn {
+    animation: fadeIn 0.8s ease-out;
   }
 
-  .dark {
-    --background: 220 20% 10%;
-    --foreground: 220 15% 95%;
+  .animate-gradient {
+    background-size: 200% 200%;
+    animation: gradientShift 3s ease infinite;
+  }
 
-    --card: 220 18% 14%;
-    --card-foreground: 220 15% 95%;
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 
-    --popover: 220 18% 14%;
-    --popover-foreground: 220 15% 95%;
+  @keyframes gradientShift {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
 
-    --primary: 217 91% 60%;
-    --primary-foreground: 0 0% 100%;
-    --primary-glow: 217 91% 70%;
+  /* Smooth scroll behavior */
+  html {
+    scroll-behavior: smooth;
+  }
 
-    --secondary: 220 18% 18%;
-    --secondary-foreground: 220 15% 95%;
+  /* Custom scrollbar for dark mode */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
 
-    --muted: 220 18% 18%;
-    --muted-foreground: 220 10% 60%;
+  ::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+  }
 
-    --accent: 142 76% 45%;
-    --accent-foreground: 0 0% 100%;
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, #3b82f6, #06b6d4);
+    border-radius: 10px;
+  }
 
-    --destructive: 0 62% 50%;
-    --destructive-foreground: 0 0% 100%;
-
-    --warning: 38 92% 50%;
-    --warning-foreground: 0 0% 100%;
-
-    --border: 220 18% 22%;
-    --input: 220 18% 22%;
-    --ring: 217 91% 60%;
-
-    --bus-active: 217 91% 60%;
-    --bus-idle: 220 10% 55%;
-    --route-path: 142 76% 45%;
-    --demand-high: 0 84% 60%;
-    --demand-medium: 38 92% 50%;
-    --demand-low: 142 76% 45%;
-
-    --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%), hsl(217 91% 70%));
-    --gradient-map: linear-gradient(180deg, hsl(220 20% 10% / 0.9), hsl(220 20% 10% / 0.7));
-
-    --shadow-soft: 0 2px 8px hsl(0 0% 0% / 0.3);
-    --shadow-medium: 0 4px 16px hsl(0 0% 0% / 0.4);
-    --shadow-elevated: 0 8px 24px hsl(0 0% 0% / 0.5);
-
-    --sidebar-background: 220 18% 14%;
-    --sidebar-foreground: 220 15% 95%;
-    --sidebar-primary: 217 91% 60%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 220 18% 18%;
-    --sidebar-accent-foreground: 220 15% 95%;
-    --sidebar-border: 220 18% 22%;
-    --sidebar-ring: 217 91% 60%;
+  ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(to bottom, #2563eb, #0891b2);
   }
 }
 
-@layer base {
-  * {
-    @apply border-border;
-  }
-
-  body {
-    @apply bg-background text-foreground;
-  }
+/* Additional smooth transitions */
+* {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
 }

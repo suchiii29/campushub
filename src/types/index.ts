@@ -1,22 +1,30 @@
+// src/types/index.ts
+
 export interface Trip {
   id: string;
   studentId: string;
   source: string;
   destination: string;
   requestedTime: string;
-  status: 'pending' | 'assigned' | 'in-progress' | 'completed';
+  status: "pending" | "assigned" | "in-progress" | "completed";
   busId?: string;
   createdAt: string;
   eta?: string;
-  busLocation?: { lat: number; lng: number };
+  busLocation?: {
+    lat: number;
+    lng: number;
+  };
 }
 
 export interface Bus {
   id: string;
   driverId: string;
   driverName?: string;
-  status: 'active' | 'idle' | 'maintenance';
-  location: { lat: number; lng: number };
+  status: "active" | "idle" | "maintenance";
+  location: {
+    lat: number;
+    lng: number;
+  };
   currentRoute?: string;
   passengers: number;
   capacity: number;
@@ -25,7 +33,7 @@ export interface Bus {
 
 export interface DemandPrediction {
   zone: string;
-  level: 'low' | 'medium' | 'high';
+  level: "low" | "medium" | "high";
   percentage: number;
   peakTime: string;
   coordinates: [number, number];
@@ -34,7 +42,7 @@ export interface DemandPrediction {
 export interface User {
   id: string;
   email: string;
-  role: 'student' | 'driver' | 'admin';
+  role: "student" | "driver" | "admin";
   name: string;
 }
 
@@ -42,8 +50,8 @@ export interface Route {
   id: string;
   name: string;
   stops: string[];
-  distance: number;
-  estimatedDuration: number;
+  distance: number; // in km
+  estimatedDuration: number; // in minutes
 }
 
 export interface AdminStats {
@@ -51,5 +59,5 @@ export interface AdminStats {
   totalBuses: number;
   studentsServed: number;
   avgWaitTime: number;
-  efficiency: number;
+  efficiency: number; // percentage
 }

@@ -1,5 +1,4 @@
-// src/pages/AdminPortal.tsx
-
+// src/pages/AdminPortal.tsx - COMPLETE WITH REAL-TIME FLEET MONITORING
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,7 +9,7 @@ import { Bus, Users, TrendingUp, Activity, MapPin, Clock, LogOut, User, Menu, X,
 import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
 import { db } from "@/lib/firebase";
-import { collection, query, onSnapshot, where, Timestamp, getDocs } from "firebase/firestore";
+import { collection, query, onSnapshot, where, Timestamp } from "firebase/firestore";
 
 interface BusData {
   id: string;
@@ -38,11 +37,11 @@ const AdminPortal = () => {
   const [efficiency, setEfficiency] = useState(87);
   const [recentRequests, setRecentRequests] = useState<RequestData[]>([]);
   const [busesData, setBusesData] = useState<BusData[]>([]);
+  const [driverLocations, setDriverLocations] = useState<any[]>([]);
 
   const { currentUser, logout, userRole } = useAuth();
   const navigate = useNavigate();
 
-  // Redirect if not authenticated or not admin
   useEffect(() => {
     if (!currentUser) {
       navigate("/admin/auth");
@@ -69,7 +68,33 @@ const AdminPortal = () => {
     return () => unsubscribe();
   }, []);
 
-  // Simulate bus data (in production, this would come from Firebase)
+  // ✨ NEW: Listen to all active driver locations
+  useEffect(() => {
+    const driversQuery = query(
+      collection(db, "driver_locations"),
+      where("isActive", "==", true)
+    );
+
+    const unsubscribe = onSnapshot(driversQuery, (snapshot) => {
+      const locations = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setDriverLocations(locations);
+      console.log(`👁️ Admin monitoring ${locations.length} active driver(s)`);
+    }, (error) => {
+      console.error("Error listening to driver locations:", error);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  // Update activeBuses count based on real driver data
+  useEffect(() => {
+    setActiveBuses(driverLocations.length);
+  }, [driverLocations]);
+
+  // Simulate bus data
   useEffect(() => {
     const buses: BusData[] = Array.from({ length: 12 }, (_, i) => ({
       id: `bus-${i + 1}`,
@@ -81,7 +106,6 @@ const AdminPortal = () => {
     }));
     
     setBusesData(buses);
-    setActiveBuses(buses.filter(b => b.status === "active").length);
   }, []);
 
   const handleLogout = async () => {
@@ -98,7 +122,6 @@ const AdminPortal = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-purple-50 to-indigo-50">
-      {/* Header */}
       <header className="bg-white border-b border-gray-200 sticky top-0 z-40 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
@@ -112,7 +135,6 @@ const AdminPortal = () => {
               </div>
             </div>
 
-            {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-4">
               <div className="flex items-center gap-3 px-4 py-2 bg-gray-100 rounded-lg">
                 <div className="bg-gradient-to-r from-purple-600 to-indigo-600 p-2 rounded-full">
@@ -130,7 +152,6 @@ const AdminPortal = () => {
               </Button>
             </div>
 
-            {/* Mobile Menu Button */}
             <button
               className="md:hidden p-2 rounded-lg hover:bg-gray-100"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -139,7 +160,6 @@ const AdminPortal = () => {
             </button>
           </div>
 
-          {/* Mobile Menu */}
           {mobileMenuOpen && (
             <div className="md:hidden py-4 border-t border-gray-200">
               <div className="space-y-3">
@@ -168,16 +188,15 @@ const AdminPortal = () => {
           <p className="text-muted-foreground">Monitor fleet, analyze demand, and optimize routes</p>
         </header>
 
-        {/* Key Metrics */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
           <Card className="shadow-lg hover:shadow-xl transition-shadow">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">Active Buses</CardTitle>
+              <CardTitle className="text-sm font-medium">Active Drivers</CardTitle>
               <Bus className="h-4 w-4 text-green-500" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{activeBuses}</div>
-              <p className="text-xs text-muted-foreground">of {busesData.length} total fleet</p>
+              <p className="text-xs text-muted-foreground">online right now</p>
             </CardContent>
           </Card>
 
@@ -215,7 +234,6 @@ const AdminPortal = () => {
           </Card>
         </div>
 
-        {/* Main Dashboard */}
         <Tabs defaultValue="overview" className="space-y-6">
           <TabsList>
             <TabsTrigger value="overview">Overview</TabsTrigger>
@@ -225,15 +243,59 @@ const AdminPortal = () => {
 
           <TabsContent value="overview" className="space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Live Map */}
+              {/* ✨ UPDATED: Live Driver Tracking */}
               <Card className="shadow-lg hover:shadow-xl transition-shadow">
                 <CardHeader>
-                  <CardTitle>Live Bus Tracking</CardTitle>
-                  <CardDescription>Real-time locations of all buses</CardDescription>
+                  <CardTitle>Live Driver Tracking</CardTitle>
+                  <CardDescription>
+                    Real-time locations of all active drivers ({driverLocations.length} online)
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="h-96 bg-gradient-to-br from-purple-100 to-indigo-100 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-300">
-                    <p className="text-muted-foreground">Interactive map with bus locations</p>
+                  <div className="space-y-3">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-96 overflow-y-auto">
+                      {driverLocations.map((driver) => (
+                        <div 
+                          key={driver.id} 
+                          className="p-4 bg-blue-50 border-2 border-blue-200 rounded-lg hover:bg-blue-100 transition-colors"
+                        >
+                          <div className="flex items-start justify-between mb-2">
+                            <div className="flex items-center gap-2">
+                              <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                              <p className="font-semibold text-sm text-gray-900">
+                                {driver.displayName || driver.email}
+                              </p>
+                            </div>
+                            <span className="text-xs bg-green-500 text-white px-2 py-1 rounded-full font-semibold">
+                              ACTIVE
+                            </span>
+                          </div>
+                          
+                          <div className="space-y-1 text-xs text-gray-600">
+                            <p className="flex items-center gap-1">
+                              <MapPin className="h-3 w-3" />
+                              {driver.latitude?.toFixed(5)}, {driver.longitude?.toFixed(5)}
+                            </p>
+                            <p className="flex items-center gap-1">
+                              <Activity className="h-3 w-3" />
+                              Speed: {(driver.speed || 0).toFixed(1)} km/h
+                            </p>
+                            <p className="flex items-center gap-1">
+                              <Clock className="h-3 w-3" />
+                              Updated: {driver.timestamp?.toDate?.()?.toLocaleTimeString() || 'Just now'}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    
+                    {driverLocations.length === 0 && (
+                      <div className="text-center py-12 text-gray-500">
+                        <Bus className="h-16 w-16 mx-auto mb-3 text-gray-300" />
+                        <p className="text-sm font-medium">No active drivers</p>
+                        <p className="text-xs mt-1">Drivers will appear here when they start sharing location</p>
+                      </div>
+                    )}
                   </div>
                 </CardContent>
               </Card>
